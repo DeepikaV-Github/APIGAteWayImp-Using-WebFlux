@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      # Static routes
+      routes:
+        - id: user-service-client
+          uri: lb://user-service-client
+          predicates:
+            - Path=/users/**
+
+        - id: order-service-client
+          uri: lb://order-service-client
+          predicates:
+            - Path=/orders/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka/
